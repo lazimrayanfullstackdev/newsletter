@@ -13,6 +13,14 @@ app.get("/",function(req,res){
     res.sendFile(__dirname+'/signup.html');
 })
 
+app.post("/failure",function(req,res){
+    res.redirect("/");
+})
+
+app.post("/success",function (req,res) {
+    res.redirect("/");
+})
+
 app.post("/",function(req,res){
     const firstname= req.body.firstname;
     const lastname= req.body.lastname;
@@ -35,11 +43,16 @@ app.post("/",function(req,res){
     const url = "https://us11.api.mailchimp.com/3.0/lists/108feb7fc6"
     const options = {
         method: "POST",
-        auth: "lazimrayan:2bfcff7974acc0794b85c76903811e73-us11"
+        auth: "lazimrayan:b9ac4ff8bcf3cd3c3cd6c0e25f131766-us11"
     };
     
 
     const request = https.request(url, options, function(response){
+        if (response.statusCode==200) {
+            res.sendFile(__dirname+"/success.html");
+        }else{
+            res.sendFile(__dirname+"/failure.html");
+        }
         response.on("data",function(data){
             console.log(JSON.parse(data));
         })
@@ -53,6 +66,9 @@ app.listen(3000, function(){
     console.log("Server is running on port 3000");
 })
 
+
+
+
 //Mailchimp API
-//API Key: 2bfcff7974acc0794b85c76903811e73-us11
+//API Key: b9ac4ff8bcf3cd3c3cd6c0e25f131766-us11
 //Audience ID: 108feb7fc6
